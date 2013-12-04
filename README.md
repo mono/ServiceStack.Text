@@ -1,3 +1,6 @@
+This is a fork of ServiceStack.Text before the license was changed to the
+Aferro GPL.
+
 [Join the ServiceStack Google+ group](http://groups.google.com/group/servicestack) or
 follow [@ServiceStack](http://twitter.com/servicestack) for project updates.
 
