@@ -622,6 +622,7 @@ namespace ServiceStack.Text
         [MonoTouch.Foundation.Preserve]
         public static void RegisterForAot()
         {
+#if false
 			RegisterTypeForAot<Poco>();
 
             RegisterElement<Poco, string>();
@@ -666,6 +667,7 @@ namespace ServiceStack.Text
 			RegisterTypeForAot<DateTime?>();
 			RegisterTypeForAot<TimeSpan?>();
 			RegisterTypeForAot<Guid?>();
+#endif
         }
 
 		[MonoTouch.Foundation.Preserve]
