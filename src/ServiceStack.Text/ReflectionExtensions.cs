@@ -774,7 +774,14 @@ namespace ServiceStack.Text
 #if NETFX_CORE
             return type.GetTypeInfo().DeclaredConstructors.FirstOrDefault(c => c.GetParameters().Count() == 0);
 #else
-            return type.GetConstructor(Type.EmptyTypes);
+            var j = type.GetConstructor(Type.EmptyTypes);
+
+#if MONOTOUCH || ANDROID
+			if (j == null){
+				Console.WriteLine ("Linker took out a constructor for {0}", type);
+			}
+#endif
+			return j;
 #endif
         }
 

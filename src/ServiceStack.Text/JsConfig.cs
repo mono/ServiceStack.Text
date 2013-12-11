@@ -670,10 +670,19 @@ namespace ServiceStack.Text
 #endif
         }
 
+		//always false
+		static bool falseVar;
+
 		[MonoTouch.Foundation.Preserve]
 		public static void RegisterTypeForAot<T>()
 		{
 			AotConfig.RegisterSerializers<T>();
+
+			// Linker trick: to include the linked stuff
+			if (falseVar) {
+				new JsonArrayObjects ();
+				new JsonValue ();
+			}
 		}
 
         [MonoTouch.Foundation.Preserve]
