@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections;
 using System.Reflection;
+#if !__IOS__
 using System.Reflection.Emit;
+#endif
 using System.Threading;
 //using System.Dynamic;
 
 //Not using it here, but @marcgravell's stuff is too good not to include
 // http://code.google.com/p/fast-member/ Apache License 2.0
-#if !SILVERLIGHT && !MONOTOUCH && !XBOX
+#if !SILVERLIGHT && !MONOTOUCH && !XBOX && !__IOS__
 namespace ServiceStack.Text.FastMember
 {
     /// <summary>

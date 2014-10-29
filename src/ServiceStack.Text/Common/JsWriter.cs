@@ -249,7 +249,7 @@ namespace ServiceStack.Text.Common
         		{ typeof(Uri), Serializer.WriteObjectString },
         		{ typeof(Type), WriteType },
         		{ typeof(Exception), Serializer.WriteException },
-#if !MONOTOUCH && !SILVERLIGHT && !XBOX  && !ANDROID
+				#if !MONOTOUCH && !SILVERLIGHT && !XBOX  && !ANDROID && !__ANDROID__ && !__IOS__
                 { typeof(System.Data.Linq.Binary), Serializer.WriteLinqBinary },
 #endif
         	};
