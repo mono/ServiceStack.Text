@@ -610,16 +610,24 @@ namespace ServiceStack.Text
 #endif
         }
 
-#if MONOTOUCH
-        /// <summary>
+#if MONOTOUCH || __UNIFIED__
+		/// <summary>
         /// Provide hint to MonoTouch AOT compiler to pre-compile generic classes for all your DTOs.
         /// Just needs to be called once in a static constructor.
         /// </summary>
+		#if MONOTOUCH
         [MonoTouch.Foundation.Preserve]
+		#else
+		[Foundation.Preserve]
+		#endif
 		public static void InitForAot() { 
 		}
 
+		#if MONOTOUCH
         [MonoTouch.Foundation.Preserve]
+		#else
+		[Foundation.Preserve]
+		#endif
         public static void RegisterForAot()
         {
 #if false
@@ -673,7 +681,11 @@ namespace ServiceStack.Text
 		//always false
 		static bool falseVar;
 
-		[MonoTouch.Foundation.Preserve]
+		#if MONOTOUCH
+        [MonoTouch.Foundation.Preserve]
+		#else
+		[Foundation.Preserve]
+		#endif
 		public static void RegisterTypeForAot<T>()
 		{
 			AotConfig.RegisterSerializers<T>();
@@ -685,14 +697,22 @@ namespace ServiceStack.Text
 			}
 		}
 
+		#if MONOTOUCH
         [MonoTouch.Foundation.Preserve]
-        static void RegisterQueryStringWriter()
+		#else
+		[Foundation.Preserve]
+		#endif
+		static void RegisterQueryStringWriter()
         {
             var i = 0;
             if (QueryStringWriter<Poco>.WriteFn() != null) i++;
         }
-		        
+
+		#if MONOTOUCH
         [MonoTouch.Foundation.Preserve]
+		#else
+		[Foundation.Preserve]
+		#endif
 		internal static int RegisterElement<T, TElement>()
         {
 			var i = 0;
@@ -705,7 +725,11 @@ namespace ServiceStack.Text
 		///<summary>
 		/// Class contains Ahead-of-Time (AOT) explicit class declarations which is used only to workaround "-aot-only" exceptions occured on device only. 
 		/// </summary>			
-		[MonoTouch.Foundation.Preserve(AllMembers=true)]
+		#if MONOTOUCH
+        [MonoTouch.Foundation.Preserve(AllMembers = true)]
+		#else
+		[Foundation.Preserve(AllMembers = true)]
+		#endif
 		internal class AotConfig
 		{
 			internal static JsReader<JsonTypeSerializer> jsonReader;
@@ -839,9 +863,13 @@ namespace ServiceStack.Text
 
     }
 
-#if MONOTOUCH
+#if MONOTOUCH || __UNIFIED__
+	#if MONOTOUCH
     [MonoTouch.Foundation.Preserve(AllMembers=true)]
-    internal class Poco
+	#else
+   [Foundation.Preserve(AllMembers = true)]
+	#endif
+	internal class Poco
     {
         public string Dummy { get; set; }
     }
