@@ -418,7 +418,7 @@ namespace ServiceStack.Text
             if (emptyCtor != null)
             {
 
-#if MONOTOUCH || c|| XBOX || NETFX_CORE
+#if MONOTOUCH || c|| XBOX || NETFX_CORE || __IOS__
 				return () => Activator.CreateInstance(type);
 #elif WINDOWS_PHONE
                 return Expression.Lambda<EmptyCtorDelegate>(Expression.New(type)).Compile();
@@ -553,19 +553,19 @@ namespace ServiceStack.Text
             return type.HasAttribute<T>();
         }
 
-#if !SILVERLIGHT && !MONOTOUCH 
+		#if !SILVERLIGHT && !MONOTOUCH && !__IOS__
         static readonly Dictionary<Type, FastMember.TypeAccessor> typeAccessorMap 
             = new Dictionary<Type, FastMember.TypeAccessor>();
-#endif
+		#endif
 
         public static DataContractAttribute GetDataContract(this Type type)
         {
             var dataContract = type.FirstAttribute<DataContractAttribute>();
 
-#if !SILVERLIGHT && !MONOTOUCH && !XBOX
+			#if !SILVERLIGHT && !MONOTOUCH && !XBOX && !__IOS__
             if (dataContract == null && Env.IsMono)
                 return type.GetWeakDataContract();
-#endif
+			#endif
             return dataContract;
         }
 
@@ -574,10 +574,10 @@ namespace ServiceStack.Text
             var dataMember = pi.CustomAttributes(typeof(DataMemberAttribute), false)
                 .FirstOrDefault() as DataMemberAttribute;
 
-#if !SILVERLIGHT && !MONOTOUCH && !XBOX
+			#if !SILVERLIGHT && !MONOTOUCH && !XBOX && !__IOS__
             if (dataMember == null && Env.IsMono)
                 return pi.GetWeakDataMember();
-#endif
+			#endif
             return dataMember;
         }
 
@@ -586,14 +586,14 @@ namespace ServiceStack.Text
             var dataMember = pi.CustomAttributes(typeof(DataMemberAttribute), false)
                 .FirstOrDefault() as DataMemberAttribute;
 
-#if !SILVERLIGHT && !MONOTOUCH && !XBOX
+			#if !SILVERLIGHT && !MONOTOUCH && !XBOX && !__IOS__
             if (dataMember == null && Env.IsMono)
                 return pi.GetWeakDataMember();
-#endif
+			#endif
             return dataMember;
         }
 
-#if !SILVERLIGHT && !MONOTOUCH && !XBOX
+		#if !SILVERLIGHT && !MONOTOUCH && !XBOX && !__IOS__
         public static DataContractAttribute GetWeakDataContract(this Type type)
         {
             var attr = type.CustomAttributes().FirstOrDefault(x => x.GetType().Name == DataContract);
@@ -674,7 +674,7 @@ namespace ServiceStack.Text
             }
             return null;
         }
-#endif
+		#endif
     }
 
     public static class PlatformExtensions //Because WinRT is a POS
@@ -1001,7 +1001,7 @@ namespace ServiceStack.Text
 
         public static bool IsDynamic(this Assembly assembly)
         {
-#if MONOTOUCH || WINDOWS_PHONE || NETFX_CORE
+#if MONOTOUCH || WINDOWS_PHONE || NETFX_CORE || __IOS__
             return false;
 #else
             try

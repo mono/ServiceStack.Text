@@ -10,7 +10,7 @@
 // Licensed under the same terms of ServiceStack: new BSD license.
 //
 
-#if !XBOX && !MONOTOUCH && !SILVERLIGHT
+#if !XBOX && !MONOTOUCH && !SILVERLIGHT && !__IOS__
 using System.Reflection.Emit;
 #endif
 
@@ -92,12 +92,12 @@ namespace ServiceStack.Text.Common
                     return null;
                 }
 
-#if !SILVERLIGHT && !MONOTOUCH
+				#if !SILVERLIGHT && !MONOTOUCH && !__IOS__
                 if (type.IsInterface || type.IsAbstract)
                 {
                     return DynamicProxy.GetInstanceFor(type).GetType();
                 }
-#endif
+				#endif
 
                 return type;
             }
@@ -262,7 +262,7 @@ namespace ServiceStack.Text.Common
                 if (fieldInfo == null) return null;
             }
 
-#if SILVERLIGHT || MONOTOUCH || XBOX
+#if SILVERLIGHT || MONOTOUCH || XBOX || __IOS__
             if (propertyInfo.CanWrite)
             {
                 var setMethodInfo = propertyInfo.SetMethod();
@@ -277,7 +277,7 @@ namespace ServiceStack.Text.Common
 #endif
         }
 
-#if !SILVERLIGHT && !MONOTOUCH && !XBOX
+#if !SILVERLIGHT && !MONOTOUCH && !XBOX && !__IOS__
 
         private static SetPropertyDelegate CreateIlPropertySetter(PropertyInfo propertyInfo)
         {
@@ -339,7 +339,7 @@ namespace ServiceStack.Text.Common
         {
             if (!propertyInfo.CanWrite || propertyInfo.GetIndexParameters().Any()) return null;
 
-#if SILVERLIGHT || MONOTOUCH || XBOX
+#if SILVERLIGHT || MONOTOUCH || XBOX || __IOS__
             var setMethodInfo = propertyInfo.SetMethod();
             return (instance, value) => setMethodInfo.Invoke(instance, new[] { value });
 #else
@@ -350,7 +350,7 @@ namespace ServiceStack.Text.Common
         internal static SetPropertyDelegate GetSetFieldMethod(Type type, FieldInfo fieldInfo)
         {
 
-#if SILVERLIGHT || MONOTOUCH || XBOX
+#if SILVERLIGHT || MONOTOUCH || XBOX || __IOS__
             return (instance, value) => fieldInfo.SetValue(instance, value);
 #else
             return CreateIlFieldSetter(fieldInfo);
@@ -374,7 +374,7 @@ namespace ServiceStack.Text.Common
             if (fieldInfo.ReflectedType() != fieldInfo.DeclaringType)
                 fieldInfo = fieldInfo.DeclaringType.GetFieldInfo(fieldInfo.Name);
 
-#if SILVERLIGHT || MONOTOUCH || XBOX
+#if SILVERLIGHT || MONOTOUCH || XBOX || __IOS__
             return (instance, value) => fieldInfo.SetValue(instance, value);
 #else
 			return CreateIlFieldSetter(fieldInfo);

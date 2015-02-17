@@ -240,9 +240,9 @@ namespace ServiceStack.Text.Jsv
 
 		public void WriteLinqBinary(TextWriter writer, object linqBinaryValue)
         {
-#if !MONOTOUCH && !SILVERLIGHT && !XBOX  && !ANDROID
+			#if !MONOTOUCH && !SILVERLIGHT && !XBOX  && !ANDROID && !__ANDROID__ && !__IOS__
 			WriteRawString(writer, Convert.ToBase64String(((System.Data.Linq.Binary)linqBinaryValue).ToArray()));
-#endif
+			#endif
         }
 
 		public object EncodeMapKey(object value)
